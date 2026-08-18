@@ -5,4 +5,4 @@ end
 
 vim.g.loaded_my_plugin = true
 
-require("highlight-gi").create_commands()
+require("highlight-gi").create_autocmds()
