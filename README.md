@@ -8,7 +8,7 @@ underline, bold, colours (fg and bg) and more, see config section below or :help
 ```lua 
 return {
   {
-    "Aaroncanfindausername/highlight-gi.nvim",
+    "Aaroncantfindausername/highlight-gi.nvim",
     lazy = false,
     opts = {},
   },
