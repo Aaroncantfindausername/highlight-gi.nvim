@@ -1,2 +1,67 @@
 # highlight-gi.nvim
-- lorem ispum
+This plugin highlights the location of last input i.e where gi takes you. Useful as an indicator of where you 
+left off in a buffer. Highlight triggers only for file buffers and only on BufWinEnter. Clears after changes are made 
+or insert mode is entered. Highlight can be customised to be any valid nvim highlight group, this includes: 
+underline, bold, colours (fg and bg) and more, see config section below or :help nvim_set_hl().
+## Configuration
+```lua 
+require("highlight-gi").setup({
+  default = true, -- set to false to use custom highlight group 
+  custom_hl_group_opts = {
+    fg = "#ffffff", 
+    bg = "#00ff00", 
+    -- bold = true,
+    -- underline = true,
+    -- ...
+  }
+})
+```
+### Custom highlight group options 
+(From :help nvim_set_hl)
+• altfont: boolean
+• bg: color name or "#RRGGBB" or "fg"/"bg" which alias foreground and background values of Normal group respectively
+• bg_indexed: boolean. If true, `bg` is an RGB approximation
+  of `ctermbg` (a palette index). UIs rendering cterm
+  natively may prefer `ctermbg`.
+• blend: integer between 0 and 100
+• blink: boolean
+• bold: boolean
+• conceal: boolean Concealment at the UI level (terminal
+  SGR), unrelated to |:syn-conceal|.
+• cterm: cterm attribute map, like |highlight-args|. If not
+  set, cterm attributes will match those from the attribute
+  map documented above.
+• ctermbg: Sets background of cterm color |ctermbg|
+• ctermfg: Sets foreground of cterm color |ctermfg|
+• dim: boolean
+• fg: color name or "#RRGGBB" or "fg"/"bg" which alias foreground and background values of Normal group respectively
+• fg_indexed: boolean. Same as `bg_indexed`, for `fg` and
+  `ctermfg`.
+• italic: boolean
+• link: Name of highlight group to link to. |:hi-link|
+• link_global: Like "link", but always resolved in the global
+  namespace (ns=0).
+• nocombine: boolean
+• overline: boolean
+• reverse: boolean
+• sp: Color name or "#RRGGBB"
+• standout: boolean
+• strikethrough: boolean
+• undercurl: boolean
+• underdashed: boolean
+• underdotted: boolean
+• underdouble: boolean
+• underline: boolean
+### Link to existing highlight group 
+Use the link or link_global option to use an existing highlight group (see highlight groups with :highlight)
+E.g
+```lua 
+  custom_hl_group_opts = {
+    link = "PmenuSel"
+  }
+```
+### Lua API 
+```lua 
+require("highlight-gi").highlight() -- Add highlight to current buffer 
+require("highlight-gi").clear_highlights() -- Clear highlight for current buffer
+```

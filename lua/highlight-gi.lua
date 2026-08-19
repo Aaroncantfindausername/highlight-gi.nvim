@@ -1,12 +1,15 @@
 local M = {}
+local highlight = require("highlight-gi.highlight")
 
 ---Default plugin options.
----@class MyPluginConfig
----@field greeting string
----@field verbose boolean
+---@class HighlightgiConfig
+---@field default boolean # Use default config
+---@field custom_hl_group_opts table<string,any> # Opts table passed to nvim_set_hl() to create custom highlight
+
+-- @type HighlightgiConfig
 M.defaults = {
-	greeting = "Hello from my_plugin!",
-	verbose = false,
+	default = true,
+	custom_hl_group_opts = {},
 }
 
 ---Active plugin configuration.
@@ -20,54 +23,11 @@ local autocmds_created = false
 ---@param opts? table
 function M.setup(opts)
 	M.config = vim.tbl_deep_extend("force", M.defaults, opts or {})
-end
-
-M.ns = vim.api.nvim_create_namespace("highlight-gi")
-
-function M.highlight()
-	local bufnr = vim.api.nvim_get_current_buf()
-	if vim.bo[bufnr].buftype ~= "" then
-		return
+	if M.config.default then
+		vim.cmd("highlight default link LastInsertHighlight DiffText")
+	else
+		vim.api.nvim_set_hl(0, "LastInsertHighlight", M.config.custom_hl_group_opts)
 	end
-	local rc = vim.api.nvim_buf_get_mark(0, "^")
-	-- rc is 0,0 if mark doesn't exist
-	local row, col = rc[1], rc[2]
-	if row == 0 and col == 0 then
-		return
-	end
-	local line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1] or ""
-	local line_len = #line
-	local start_col = col - 1
-	local end_col = col
-	if start_col < 0 then
-		start_col = 0
-		end_col = end_col + 1
-	end
-	if end_col > line_len then
-		end_col = line_len
-		start_col = math.max(0, line_len - 1)
-	end
-	M.clear_highlights()
-	vim.api.nvim_buf_set_extmark(0, M.ns, row - 1, start_col, {
-		end_row = row - 1,
-		end_col = end_col,
-		hl_group = "Substitute",
-		right_gravity = false,
-		end_right_gravity = false,
-		strict = false,
-	})
-end
--- testing testin
-
-function M.debug()
-	local rc = vim.api.nvim_buf_get_mark(0, "^")
-	print(vim.inspect(rc))
-	local bufnr = vim.api.nvim_get_current_buf()
-	print(vim.inspect(vim.bo[bufnr].buftype))
-end
-
-function M.clear_highlights()
-	vim.api.nvim_buf_clear_namespace(0, M.ns, 0, -1)
 end
 
 function M.create_autocmds()
@@ -79,12 +39,12 @@ function M.create_autocmds()
 	vim.api.nvim_create_autocmd("BufWinEnter", {
 		callback = function()
 			-- M.debug()
-			M.highlight()
+			highlight.highlight()
 		end,
 	})
 	vim.api.nvim_create_autocmd({ "TextChanged", "InsertEnter" }, {
 		callback = function()
-			M.clear_highlights()
+			highlight.clear_highlights()
 		end,
 	})
 end
