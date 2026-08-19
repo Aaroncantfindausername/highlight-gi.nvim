@@ -20,7 +20,7 @@ see config section below or :help nvim_set_hl(). ## Installation ### lazy.nvim
 >lua
     return {
       {
-        "Aaroncanfindausername/highlight-gi.nvim",
+        "Aaroncantfindausername/highlight-gi.nvim",
         lazy = false,
         opts = {},
       },
