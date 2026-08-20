@@ -73,6 +73,6 @@ E.g
 ```
 ### Lua API 
 ```lua 
-require("highlight-gi").highlight() -- Add highlight to current buffer 
-require("highlight-gi").clear_highlights() -- Clear highlight for current buffer
+require("highlight-gi.highlight").highlight() -- Add highlight to current buffer 
+require("highlight-gi.highlight").clear_highlights() -- Clear highlight for current buffer
 ```
